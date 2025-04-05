@@ -5,9 +5,11 @@ Gem::Specification.new do |spec|
   spec.version     = ActiveRegistration::VERSION
   spec.authors     = [ "Salanoid" ]
   spec.email       = [ "salanoid@gmail.com" ]
-  spec.homepage    = "TODO"
-  spec.summary     = "TODO: Summary of ActiveRegistration."
-  spec.description = "TODO: Description of ActiveRegistration."
+  spec.homepage    = "https://rubygems.org/gems/active_registration"
+  spec.summary     = "A simple gem that adds generators for sign up Rails Authentication Generator."
+  spec.description = "A drop-in Rails engine that adds secure user registration with email confirmation to your rails 8+ application, that uses Rails Authentication Generator.
+
+"
   spec.license     = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
@@ -15,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["source_code_uri"] = "https://github.com/Salanoid/active_registration"
+  spec.metadata["changelog_uri"] = "https://github.com/Salanoid/active_registration/blob/main/CHANGELOG.md"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
