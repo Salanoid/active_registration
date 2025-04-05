@@ -1,0 +1,6 @@
+<%= form_with model: @user, url: registration_path do |form| %>
+  <%= form.email_field :email_address %>
+  <%= form.password_field :password %>
+  <%= form.password_field :password_confirmation %>
+  <%= form.submit "Sign Up" %>
+<% end %>

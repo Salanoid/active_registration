@@ -2,5 +2,5 @@ require "active_registration/version"
 require "active_registration/engine"
 
 module ActiveRegistration
-  # Your code goes here...
+  autoload :UserExtensions, "active_registration/user_extensions"
 end
