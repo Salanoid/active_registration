@@ -23,7 +23,7 @@ module ActiveRegistration
       # TODO implement edit and update in the future
       # resource :registration, only: [:new, :create, :edit, :update] do
       route <<~ROUTE
-        resource :registration, only: [:new, :create] do
+        resource :registration, only: [ :new, :create ] do
           get :confirm, on: :collection
         end
       ROUTE
