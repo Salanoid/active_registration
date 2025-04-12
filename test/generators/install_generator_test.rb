@@ -38,6 +38,9 @@ class InstallGeneratorTest < Rails::Generators::TestCase
     assert_file "app/models/user.rb" do |content|
       assert_includes content, "include ActiveRegistration::UserExtensions"
     end
+
+    rubocop_result = system('bundle exec rubocop "**/*.rb"')
+    assert rubocop_result, "RuboCop issues found within the generated files"
   end
 
   private
