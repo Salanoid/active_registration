@@ -7,14 +7,8 @@ Gem::Specification.new do |spec|
   spec.email       = [ "salanoid@gmail.com" ]
   spec.homepage    = "https://rubygems.org/gems/active_registration"
   spec.summary     = "A simple gem that adds generators for sign up Rails Authentication Generator."
-  spec.description = "A drop-in Rails engine that adds secure user registration with email confirmation to your rails 8+ application, that uses Rails Authentication Generator.
-
-"
+  spec.description = "A drop-in Rails engine that adds secure user registration with email confirmation to your rails 8+ application, that uses Rails Authentication Generator."
   spec.license     = "MIT"
-
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/Salanoid/active_registration"
