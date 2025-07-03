@@ -11,7 +11,8 @@ class RegistrationsController < ApplicationController
       ConfirmationMailer.confirmation_instructions(@user).deliver_later
       redirect_to root_path, notice: "Confirmation email sent!"
     else
-      render :new
+      flash[:alert] = @user.errors.full_messages.join(", ")
+      render :new, status: :unprocessable_entity
     end
   end
 
