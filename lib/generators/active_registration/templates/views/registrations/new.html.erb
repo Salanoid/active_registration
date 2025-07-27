@@ -1,20 +1,6 @@
 <%= form_with model: @user, url: registration_path do |form| %>
-  <div>
-    <%= form.label :email_address, "Email Address" %><br>
-    <%= form.email_field :email_address %>
-  </div>
-
-  <div>
-    <%= form.label :password, "Password" %><br>
-    <%= form.password_field :password %>
-  </div>
-
-  <div>
-    <%= form.label :password_confirmation, "Confirm Password" %><br>
-    <%= form.password_field :password_confirmation %>
-  </div>
-
-  <div>
-    <%= form.submit "Sign Up" %>
-  </div>
+  <%= form.email_field :email_address, placeholder: "Email Address" %><br>
+  <%= form.password_field :password, placeholder: "Password" %><br>
+  <%= form.password_field :password_confirmation, placeholder: "Confirm Password" %><br>
+  <%= form.submit "Sign Up" %><br>
 <% end %>
