@@ -34,11 +34,49 @@ Run the installation generator:
 ```bash
 rails generate active_registration:install
 ```
+This generator will:
+- Add necessary fields to your User model (confirmation_token, confirmation_sent_at, confirmed_at)
+- Create a RegistrationsController for handling user registration
+- Generate view templates for registration forms
+- Add routes for registration and confirmation
+- Create a ConfirmationMailer and associated views
+- Inject necessary methods into your User model
 
 Apply database migrations:
 ```bash
 rails db:migrate
 ```
+## What the Generator Does
+
+The `active_registration:install` generator performs the following actions:
+
+1. **Database Migration**: Adds confirmation-related fields to your users table:
+   - `confirmation_token`: A unique token for email confirmation
+   - `confirmation_sent_at`: When the confirmation email was sent
+   - `confirmed_at`: When the user confirmed their email
+
+2. **Controller Generation**: Creates a RegistrationsController that handles:
+   - New user registration
+   - Email confirmation
+
+3. **View Generation**: Creates view templates for:
+   - Registration form
+   - Confirmation emails
+
+4. **Route Configuration**: Adds routes for registration and confirmation:
+   ```ruby
+   resource :registration, only: [ :new, :create ] do
+     get :confirm, on: :collection
+   end
+   ```
+
+5. **Mailer Generation**: Creates a ConfirmationMailer for sending confirmation emails
+
+6. **User Model Extension**: Adds methods to your User model:
+   - `confirm!`: Confirms a user's email
+   - `confirmed?`: Checks if a user is confirmed
+   - `confirmation_period_valid?`: Checks if the confirmation token is still valid
+   - `generate_confirmation_token`: Generates a secure confirmation token
 
 ## Configuration
 ### Development Environment
