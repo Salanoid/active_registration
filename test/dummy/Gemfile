@@ -1,0 +1,13 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 8.0.0"
+gem "sqlite3"
+gem "puma"
+gem "bcrypt"
+
+# Use the active_registration gem from the parent directory
+gem "active_registration", path: "../.."
+
+# Other testing dependencies
+gem "capybara"
+gem "selenium-webdriver"
