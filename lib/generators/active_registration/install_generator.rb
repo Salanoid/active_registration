@@ -36,14 +36,59 @@ module ActiveRegistration
       user_model_path = "app/models/user.rb"
       return unless File.exist?(user_model_path)
 
+      content = File.read(user_model_path)
+
+      if content.include?("validates :email_address, presence: true, uniqueness: true") &&
+         content.include?("def confirm!") &&
+         content.include?("def generate_confirmation_token")
+        say "User model already contains active_registration methods, skipping injection.", :yellow
+        return
+      end
+
       inject_validations_and_hooks(user_model_path)
-      inject_public_methods(user_model_path)
-      inject_private_methods(user_model_path)
+      inject_all_methods(user_model_path)
     rescue Errno::ENOENT
       say "User model not found. Please add the registration methods to your User model manually.", :yellow
     end
 
     private
+
+    def find_method_end(lines, method_start_index)
+      depth = 1  # We're already inside the method definition
+      (method_start_index + 1...lines.length).each do |i|
+        line = lines[i]
+        depth += 1 if line.match(/^\s*(def|class|module|if|unless|case|begin|do\s*$|do\s*\||while|for)\b/)
+        depth -= 1 if line.match(/^\s*end\s*$/)
+        return i if depth == 0  # Found the matching end for our method
+      end
+      lines.length - 1
+    end
+
+    def inject_all_methods(user_model_path)
+      inject_into_file user_model_path, before: /^end\s*$/ do
+        <<~RUBY
+
+          def confirm!
+            update(confirmed_at: Time.current, confirmation_token: nil)
+          end
+
+          def confirmed?
+            confirmed_at.present?
+          end
+
+          def confirmation_period_valid?
+            confirmation_sent_at >= 24.hours.ago
+          end
+
+          private
+
+          def generate_confirmation_token
+            self.confirmation_token = SecureRandom.urlsafe_base64
+            self.confirmation_sent_at = Time.current
+          end
+        RUBY
+      end
+    end
 
     def inject_validations_and_hooks(user_model_path)
       content = File.read(user_model_path)
@@ -70,136 +115,6 @@ module ActiveRegistration
           before_create :generate_confirmation_token
 
         RUBY
-      end
-    end
-
-    def inject_public_methods(user_model_path)
-      content = File.read(user_model_path)
-      lines = content.lines
-      private_line_index = lines.find_index { |line| line.strip == "private" }
-
-      last_public_method_index = nil
-      lines.each_with_index do |line, index|
-        if line.match(/^\s*def /) && (private_line_index.nil? || index < private_line_index)
-          last_public_method_index = index
-        end
-      end
-
-      if last_public_method_index
-        method_end_index = last_public_method_index
-        lines[(last_public_method_index + 1)..-1].each_with_index do |line, rel_index|
-          if line.match(/^\s*end\s*$/)
-            method_end_index = last_public_method_index + 1 + rel_index
-            break
-          end
-        end
-
-        inject_into_file user_model_path, after: lines[method_end_index] do
-          <<~RUBY
-
-            def confirm!
-              update(confirmed_at: Time.current, confirmation_token: nil)
-            end
-
-            def confirmed?
-              confirmed_at.present?
-            end
-
-            def confirmation_period_valid?
-              confirmation_sent_at >= 24.hours.ago
-            end
-          RUBY
-        end
-      elsif private_line_index
-        inject_into_file user_model_path, before: lines[private_line_index] do
-          <<~RUBY
-            def confirm!
-              update(confirmed_at: Time.current, confirmation_token: nil)
-            end
-
-            def confirmed?
-              confirmed_at.present?
-            end
-
-            def confirmation_period_valid?
-              confirmation_sent_at >= 24.hours.ago
-            end
-          RUBY
-        end
-      else
-        inject_into_file user_model_path, before: /^end\s*$/ do
-          <<~RUBY
-            def confirm!
-              update(confirmed_at: Time.current, confirmation_token: nil)
-            end
-
-            def confirmed?
-              confirmed_at.present?
-            end
-
-            def confirmation_period_valid?
-              confirmation_sent_at >= 24.hours.ago
-            end
-          RUBY
-        end
-      end
-    end
-
-    def inject_private_methods(user_model_path)
-      content = File.read(user_model_path)
-
-      if content.include?("private")
-        lines = content.lines
-        private_line_index = lines.find_index { |line| line.strip == "private" }
-
-        last_private_method_index = nil
-        lines[(private_line_index + 1)..-1].each_with_index do |line, rel_index|
-          if line.match(/^\s*def /)
-            last_private_method_index = private_line_index + 1 + rel_index
-          end
-        end
-
-        if last_private_method_index
-          # Find the end of the last private method
-          method_end_index = last_private_method_index
-          lines[(last_private_method_index + 1)..-1].each_with_index do |line, rel_index|
-            if line.match(/^\s*end\s*$/)
-              method_end_index = last_private_method_index + 1 + rel_index
-              break
-            end
-          end
-
-          inject_into_file user_model_path, after: lines[method_end_index] do
-            <<~RUBY
-
-              def generate_confirmation_token
-                self.confirmation_token = SecureRandom.urlsafe_base64
-                self.confirmation_sent_at = Time.current
-              end
-            RUBY
-          end
-        else
-          inject_into_file user_model_path, after: /^\s*private\s*$/ do
-            <<~RUBY
-
-              def generate_confirmation_token
-                self.confirmation_token = SecureRandom.urlsafe_base64
-                self.confirmation_sent_at = Time.current
-              end
-            RUBY
-          end
-        end
-      else
-        inject_into_file user_model_path, before: /^end\s*$/ do
-          <<~RUBY
-            private
-
-            def generate_confirmation_token
-              self.confirmation_token = SecureRandom.urlsafe_base64
-              self.confirmation_sent_at = Time.current
-            end
-          RUBY
-        end
       end
     end
   end
