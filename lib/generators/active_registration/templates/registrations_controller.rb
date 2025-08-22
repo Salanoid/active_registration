@@ -8,7 +8,7 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      ConfirmationMailer.confirmation_instructions(@user).deliver_now
+      ConfirmationMailer.confirmation_instructions(@user).deliver_later
       redirect_to root_path, notice: "Confirmation email sent!"
     else
       flash[:alert] = @user.errors.full_messages.join(", ")
