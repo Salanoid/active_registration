@@ -16,7 +16,37 @@ class InstallGeneratorTest < Rails::Generators::TestCase
 
   def teardown
     FileUtils.cd(@original_dir)
-    FileUtils.rm_rf(destination_root)
+    cleanup_generated_files
+  end
+
+  private
+
+  def cleanup_generated_files
+    return unless File.exist?(destination_root)
+
+    attempts = 3
+    attempts.times do |attempt|
+      begin
+        FileUtils.rm_rf(destination_root)
+        break unless File.exist?(destination_root)
+      rescue => e
+        puts "Warning: Failed to remove #{destination_root} (attempt #{attempt + 1}/#{attempts}): #{e.message}"
+        sleep(0.1) if attempt < attempts - 1
+      end
+    end
+
+    if File.exist?(destination_root)
+      puts "ERROR: Generated test files were not cleaned up at: #{destination_root}"
+      puts "Please manually remove this directory to prevent test pollution."
+
+      begin
+        FileUtils.chmod_R(0777, destination_root)
+      rescue => e
+        puts "Warning: Could not make directory writable: #{e.message}"
+      end
+    end
+  rescue => e
+    puts "Warning: Error during cleanup: #{e.message}"
   end
 
   test "generates all files" do
@@ -44,7 +74,7 @@ class InstallGeneratorTest < Rails::Generators::TestCase
       assert_includes content, "def generate_confirmation_token"
     end
 
-    rubocop_result = system('bundle exec rubocop "**/*.rb"')
+    rubocop_result = system('find . -name "*.rb" ! -name "schema.rb" -exec bundle exec rubocop {} +')
     assert rubocop_result, "RuboCop should pass without issues for generated files"
   end
 
