@@ -36,11 +36,16 @@ class InstallGeneratorTest < Rails::Generators::TestCase
     end
 
     assert_file "app/models/user.rb" do |content|
-      assert_includes content, "include ActiveRegistration::UserExtensions"
+      assert_includes content, "validates :email_address, presence: true, uniqueness: true"
+      assert_includes content, "before_create :generate_confirmation_token"
+      assert_includes content, "def confirm!"
+      assert_includes content, "def confirmed?"
+      assert_includes content, "def confirmation_period_valid?"
+      assert_includes content, "def generate_confirmation_token"
     end
 
     rubocop_result = system('bundle exec rubocop "**/*.rb"')
-    assert rubocop_result, "RuboCop issues found within the generated files"
+    assert rubocop_result, "RuboCop should pass without issues for generated files"
   end
 
   private
