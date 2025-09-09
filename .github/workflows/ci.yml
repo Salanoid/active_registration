@@ -80,6 +80,9 @@ jobs:
           ruby-version: ruby-3.4.2
           bundler-cache: true
 
+      - name: Make bump_version.rb executable
+        run: chmod +x bin/bump_version.rb
+        
       - name: Bump version
         run: bin/bump_version.rb
 
