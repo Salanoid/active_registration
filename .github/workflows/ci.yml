@@ -10,13 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v5  
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby-3.4.2
           bundler-cache: true
+
+      - name: Clear cache
+        run: bundle clean --force
+      
+      - name: Build gem  
+        run: gem build active_registration.gemspec
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
@@ -35,6 +41,12 @@ jobs:
         with:
           ruby-version: ruby-3.4.2
           bundler-cache: true
+
+      - name: Clear cache
+        run: bundle clean --force
+      
+      - name: Build gem  
+        run: gem build active_registration.gemspec    
 
       - name: Run tests
         env:
