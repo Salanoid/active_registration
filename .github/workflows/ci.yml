@@ -80,5 +80,8 @@ jobs:
           ruby-version: ruby-3.4.2
           bundler-cache: true
 
+      - name: Bump version
+        run: bin/bump_version.rb
+
       - name: Release gem
         uses: rubygems/release-gem@v1
