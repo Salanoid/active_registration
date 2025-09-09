@@ -1,0 +1,19 @@
+current directory: /home/runner/work/active_registration/active_registration/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+/opt/hostedtoolcache/Ruby/3.4.2/x64/bin/ruby extconf.rb
+checking for rb_io_mode_t in ruby/io.h... no
+creating Makefile
+
+current directory: /home/runner/work/active_registration/active_registration/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250901-2079-3oaydv sitelibdir\=./.gem.20250901-2079-3oaydv clean
+
+current directory: /home/runner/work/active_registration/active_registration/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250901-2079-3oaydv sitelibdir\=./.gem.20250901-2079-3oaydv
+compiling stringio.c
+linking shared-object stringio.so
+
+current directory: /home/runner/work/active_registration/active_registration/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250901-2079-3oaydv sitelibdir\=./.gem.20250901-2079-3oaydv install
+/usr/bin/install -c -m 0755 stringio.so ./.gem.20250901-2079-3oaydv
+
+current directory: /home/runner/work/active_registration/active_registration/vendor/bundle/ruby/3.4.0/gems/stringio-3.1.7/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20250901-2079-3oaydv sitelibdir\=./.gem.20250901-2079-3oaydv clean
