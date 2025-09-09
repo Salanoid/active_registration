@@ -2,6 +2,7 @@
 /doc/
 /log/*.log
 /pkg/
+/vendor/
 /tmp/
 /test/dummy/db/*.sqlite3
 /test/dummy/db/*.sqlite3-*
@@ -10,3 +11,5 @@
 /test/dummy/tmp/
 pkg/
 /pkg
+vendor/
+/vendor
