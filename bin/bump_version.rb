@@ -60,3 +60,9 @@ else
 end
 
 puts "Bumped version: #{current_version} → #{new_version}"
+
+run "git config user.name 'CI Bot'"
+run "git config user.email 'ci@example.com'"
+run "git add #{version_file} #{gemfile_lock}"
+run "git commit -m 'Bump version to #{new_version}' || echo 'No changes to commit'"
+run "git tag v#{new_version}"
