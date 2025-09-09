@@ -63,7 +63,7 @@ puts "Bumped version: #{current_version} → #{new_version}"
 
 system "git config user.name 'CI Bot'"
 system "git config user.email 'ci@example.com'"
-system "git add #{version_file} #{gemfile_lock}"
+system "git add -A"
 system "git commit -m 'Bump version to #{new_version}' || echo 'No changes to commit'"
 system "git tag v#{new_version}"
 system "rm -rf pkg/"
