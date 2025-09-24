@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    active_registration (0.2.1)
+    active_registration (0.2.2)
       rails (>= 8.0.2)
 
 GEM
